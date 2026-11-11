@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mac Buddy</title>
+<style>
+:root{--bg:#f3ecff;--card:#fff;--ink:#2b2740;--mute:#6f6a86;--brand:#7c45e6;--brand-ink:#fff;--bot:#fff;--me:#7c45e6;--line:#e6dcfa;--accent:#b36bff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17112b;--card:#231a40;--ink:#f1ebff;--mute:#b4a8d6;--brand:#a97bff;--brand-ink:#14092b;--bot:#231a40;--me:#6d3fd0;--line:#3a2d63;--accent:#c79bff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17112b;--card:#231a40;--ink:#f1ebff;--mute:#b4a8d6;--brand:#a97bff;--brand-ink:#14092b;--bot:#231a40;--me:#6d3fd0;--line:#3a2d63;--accent:#c79bff;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--bg) 80%,#b36bff));color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center}
+.app{width:100%;max-width:760px;height:100%;display:flex;flex-direction:column}
+header{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);background:var(--card)}
+.logo{font-size:26px}
+header h1{font-size:17px;margin:0;line-height:1.2}
+header p{margin:0;font-size:12.5px;color:var(--mute)}
+header{flex-wrap:wrap}header #lang{margin-left:auto}select.ghost{background:var(--card);color:var(--ink)}
+.app.start #log{order:1;flex:none;overflow:visible;margin-top:auto}
+.app.start .bar{order:2;margin:6px 12px 10px;border:1px solid var(--line);border-radius:18px;padding:8px}
+.app.start .chips{order:3;justify-content:center}
+.app.start .note{order:4;margin-bottom:auto}
+textarea{border:2px solid var(--brand);background:var(--card)}
+textarea:focus{outline:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--brand) 25%,transparent)}
+.app.start .bar{border-color:var(--brand);box-shadow:0 4px 18px color-mix(in srgb,var(--brand) 18%,transparent)}
+textarea{background:Canvas;color:CanvasText;font-size:17px;font-weight:500}
+textarea::placeholder{color:var(--mute);opacity:1;font-weight:400}
+.bar{border-top:2px solid var(--brand)}
+.app.start .bar{background:var(--card);box-shadow:0 6px 24px color-mix(in srgb,var(--brand) 30%,transparent)}
+#send{font-size:16px}
+.panel{display:none;flex:1;overflow-y:auto;padding:14px}
+.app.tab-sheet #sheet,.app.tab-saved #saved,.app.tab-home #home{display:block}
+.app.tab-sheet #log,.app.tab-sheet .chips,.app.tab-sheet .note,.app.tab-sheet .bar,.app.tab-saved #log,.app.tab-saved .chips,.app.tab-saved .note,.app.tab-saved .bar,.app.tab-home #log,.app.tab-home .chips,.app.tab-home .note,.app.tab-home .bar{display:none!important}
+nav{order:9;display:flex;border-top:1px solid var(--line);background:var(--card)}
+nav button{flex:1;background:none;border:0;padding:8px 4px 10px;color:var(--mute);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button .i{font-size:22px;line-height:1}
+nav button.on{color:var(--brand);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 8px;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;line-height:1.25;text-align:center}
+.tile .ic{font-size:30px}
+.save{display:block;margin-top:8px;background:none;border:1px solid var(--line);color:var(--brand);border-radius:999px;padding:4px 10px;font-size:13px}
+.save.done{color:var(--mute)}
+table.sh{width:100%;border-collapse:collapse;font-size:14px}
+.sh th,.sh td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+.sh kbd{font:inherit;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.panel h2{font-size:17px;margin:0 0 4px}.panel .sub{color:var(--mute);font-size:13px;margin:0 0 12px}
+.row{display:flex;gap:8px;margin-top:12px}
+header{border-radius:0 0 26px 26px;border-bottom:0;box-shadow:0 8px 24px rgba(124,69,230,.12)}
+.av{position:relative;width:46px;height:46px;border-radius:15px;background:linear-gradient(135deg,#b36bff,#7c45e6);display:grid;place-items:center;font-size:24px;flex:none}
+.av i{position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;border-radius:50%;background:#22c55e;border:2px solid var(--card)}
+.ghost{border-color:var(--line);color:var(--brand);background:var(--card)}
+.msg{border-radius:20px;box-shadow:0 2px 10px rgba(80,40,160,.08)}
+.bot{border:0;border-bottom-left-radius:6px}
+.me{background:linear-gradient(135deg,#8b55f0,#6d35d8);border-bottom-right-radius:6px}
+#send{background:linear-gradient(135deg,#8b55f0,#7c45e6);color:#fff;border-radius:14px}
+nav{border-radius:24px 24px 0 0;box-shadow:0 -6px 20px rgba(124,69,230,.1);border-top:0}
+nav button .i{display:flex;padding:5px 16px;border-radius:14px}
+nav button.on .i{background:color-mix(in srgb,var(--brand) 16%,transparent)}
+.hello h2{margin:0;font-size:22px}.hello p{margin:2px 0 14px;color:var(--mute)}
+.cta{width:100%;background:linear-gradient(135deg,#8b55f0,#7c45e6);color:#fff;border:0;border-radius:18px;padding:16px;font-weight:700;letter-spacing:.05em;font-size:15px;box-shadow:0 8px 20px rgba(124,69,230,.35)}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:20px 0 10px}
+.sec h3{margin:0;font-size:16px}.sec button{background:none;border:0;color:var(--brand);font-size:13px}
+.pins{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.pin{flex:none;background:var(--card);border:0;border-radius:999px;padding:9px 15px;color:var(--ink);font-size:14px;white-space:nowrap;box-shadow:0 2px 8px rgba(80,40,160,.08)}
+.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(80,40,160,.08)}
+.card .top{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}
+.card .ct{font-weight:600}
+.card .cd{color:var(--mute);font-size:13px;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .ib{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:22px;background:color-mix(in srgb,var(--brand) 14%,var(--card))}
+.card .use{margin-top:12px;width:100%;background:var(--brand);color:var(--brand-ink);border:0;border-radius:12px;padding:12px;font-weight:700;font-size:13px;letter-spacing:.04em}
+button{font:inherit;cursor:pointer}
+.ghost{background:none;border:1px solid var(--line);color:var(--mute);border-radius:10px;padding:6px 10px;font-size:13px}
+#log{flex:1;overflow-y:auto;padding:14px 14px 6px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:10px 13px;border-radius:16px;word-wrap:break-word;overflow-wrap:anywhere}
+.bot{background:var(--bot);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.me{background:var(--me);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.msg p{margin:0 0 8px}.msg p:last-child{margin:0}
+.msg ul,.msg ol{margin:4px 0 8px;padding-left:22px}
+.msg code{background:rgba(127,127,127,.18);padding:1px 5px;border-radius:5px;font-size:.92em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:4px 14px 10px}
+.chip{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:7px 12px;font-size:14px}
+.chip:active{background:var(--brand);color:var(--brand-ink)}
+.note{font-size:12px;color:var(--mute);text-align:center;padding:0 14px 6px}
+form,.bar{display:flex;gap:8px;padding:8px 12px 12px;background:var(--card);border-top:1px solid var(--line)}
+textarea{flex:1;resize:none;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px;max-height:120px;min-height:44px}
+#send{background:var(--brand);color:var(--brand-ink);border:0;border-radius:14px;padding:0 18px;font-weight:600;min-height:44px}
+#send:disabled{opacity:.5}
+.dots{display:inline-block;animation:b 1.2s infinite}@keyframes b{50%{opacity:.3}}
+#welcome{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:max(18px,env(safe-area-inset-top,0px)) 20px max(22px,env(safe-area-inset-bottom,0px));background:linear-gradient(165deg,#bf92ff 0%,#a56af8 35%,#8248e0 100%);color:#fff;overflow-y:auto;transition:opacity .35s,transform .35s}
+#welcome.out{opacity:0;transform:translateY(-12px);pointer-events:none}
+#welcome .stage{position:relative;width:100%;max-width:420px;height:458px;margin-top:8px;flex:none}
+.ring{position:absolute;left:50%;top:96px;width:194px;height:194px;transform:translateX(-50%);border:2px solid rgba(255,255,255,.4);border-radius:50%}
+.rb{position:absolute;left:50%;top:118px;width:150px;height:150px;transform:translateX(-50%);border-radius:30px;box-shadow:0 14px 34px rgba(60,20,140,.35)}
+.bub{position:absolute;max-width:64%;padding:10px 14px;border-radius:18px;font-size:15px;line-height:1.35;font-weight:600;box-shadow:0 8px 20px rgba(60,20,140,.25);animation:fl 5s ease-in-out infinite}
+.b1{left:0;top:0;max-width:58%;background:#fff;color:#5a2bc2;border-bottom-left-radius:4px}
+.b2{right:0;top:40px;max-width:40%;background:#7c45e6;color:#fff;border-bottom-right-radius:4px;animation-delay:-1.5s}
+.b3{left:4%;bottom:0;background:rgba(91,45,190,.5);color:#fff;border:1px solid rgba(255,255,255,.45);backdrop-filter:blur(6px);border-top-left-radius:4px;animation-delay:-3s}
+@keyframes fl{50%{transform:translateY(-6px)}}
+#welcome .copy{text-align:center;max-width:420px;padding-top:14px}
+#welcome h2{margin:0 0 8px;font-size:28px;line-height:1.15}
+#welcome p{margin:0;font-size:clamp(9px,calc((100vw - 40px)/36),12px);white-space:nowrap}
+#go{width:100%;max-width:420px;flex:none;margin-top:20px;background:linear-gradient(135deg,#7c45e6,#6a2fd3);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:17px;font-weight:700;font-size:17px;letter-spacing:.06em;box-shadow:0 10px 24px rgba(50,15,120,.4)}
+.low{position:absolute;left:0;right:0;top:294px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
+.low .bub{position:static;max-width:calc(50% - 5px);padding:8px 12px;font-size:14px}
+.b4{background:#fff;color:#5a2bc2;border-top-right-radius:4px;animation-delay:-2s}
+.b5{margin-left:auto;background:#7c45e6;color:#fff;border-bottom-right-radius:4px;animation-delay:-4s}
+@media (prefers-reduced-motion:reduce){.bub{animation:none}#welcome{transition:none}}
+html{background:linear-gradient(165deg,#bf92ff 0%,#a56af8 35%,#8248e0 100%) no-repeat}
+body{background:transparent}
+.hello h2,.hello p,.sec h3,.sec button,.panel h2,.panel .sub,.note{color:#fff}
+.hello p,.panel .sub,.note{opacity:.92}
+.sec button{text-decoration:underline}
+.me{background:linear-gradient(135deg,#7c45e6,#6a2fd3);border:1px solid rgba(255,255,255,.35)}
+.cta{background:linear-gradient(135deg,#7c45e6,#6a2fd3);border:1px solid rgba(255,255,255,.35);box-shadow:0 10px 24px rgba(50,15,120,.4)}
+#sheet>div{background:var(--card);border-radius:18px;padding:6px 10px;box-shadow:0 4px 14px rgba(50,15,120,.18)}
+.chip{border:0;box-shadow:0 2px 8px rgba(50,15,120,.15)}
+.pin,.card,.tile{box-shadow:0 4px 14px rgba(50,15,120,.18)}
+.msg{box-shadow:0 4px 14px rgba(50,15,120,.18)}
+.chips{grid-template-columns:1fr 1fr;gap:10px;padding:6px 14px 10px}
+.chip{border-radius:16px;padding:12px 10px;text-align:left;font-size:14px;font-weight:600;line-height:1.25}
+.app.start .bar{margin:6px 14px 14px;padding:12px;border-radius:22px;gap:10px}
+.app.start textarea{min-height:112px;font-size:18px;border-radius:16px}
+.app.start #send{align-self:stretch;padding:0 22px;font-size:17px}
+@media (max-height:700px){.app.start #log{display:none}}
+.app.start #log{flex:1;margin-top:0;padding:0;overflow:hidden}
+@media (max-height:700px){.app.start #log{display:block}}
+.app.start .bar{box-shadow:0 14px 44px rgba(50,15,120,.5);border:2px solid #fff}
+.app.start .chips{flex:1;align-content:start;overflow-y:auto;gap:8px;padding:16px 18px 8px}
+.app.start .chip{background:rgba(70,30,150,.35);color:#fff;border:1px solid rgba(255,255,255,.3);box-shadow:none;border-radius:12px;padding:8px 10px;font-size:12.5px;font-weight:500}
+.app.start .note{margin-bottom:0;padding:6px 14px 10px;font-size:11.5px}
+.app.start textarea::placeholder{font-size:15px;line-height:1.35}
+</style>
+</head>
+<body>
+<div class="app start">
+<header>
+  <div class="av">💻<i></i></div>
+  <div><h1>Mac Buddy</h1><p>SencoSchools Teacher ka na!</p></div>
+  <select class="ghost" id="lang" aria-label="Language"><option value="en">English</option><option value="fil">Filipino</option></select>
+  <button class="ghost" id="reset" type="button">New chat</button>
+</header>
+<div id="log" aria-live="polite"></div>
+<div class="chips" id="chips"></div>
+<div class="note" id="note">AI buddy based on Apple Support guides; not an official Apple or DepEd guide. For serious problems, ask your school ICT Coordinator.</div>
+<div class="bar">
+  <textarea id="q" rows="1" placeholder="New to Mac? That’s okay! Tell me what you’d like to learn. You can type in English or Filipino."></textarea>
+  <button id="send" type="button">Send</button>
+</div>
+<div class="panel" id="home"></div>
+<div class="panel" id="sheet"></div>
+<div class="panel" id="saved"></div>
+<nav id="nav">
+  <button type="button" data-tab="chat" class="on"><span class="i">💬</span><span class="l">Chat</span></button>
+  <button type="button" data-tab="sheet"><span class="i">⌨️</span><span class="l">Shortcuts</span></button>
+  <button type="button" data-tab="saved"><span class="i">📌</span><span class="l">Saved</span></button>
+</nav>
+</div>
+<div id='welcome' role='dialog' aria-modal='true' aria-label='Welcome'>
+  <div class='stage'>
+    <div class='bub b1'>Hello, Teacher! I’m Mac-Mac, your MacBook Buddy.</div>
+    <div class='ring'></div>
+    <svg class='rb' viewBox='0 0 150 150' role='img' aria-label='Mac-Mac, the MacBook robot'>
+      <defs><linearGradient id='bgq' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#9ad0f0'/><stop offset='1' stop-color='#5fa3d6'/></linearGradient></defs>
+      <rect width='150' height='150' rx='30' fill='url(#bgq)'/>
+      <path d='M52 30 L46 15M98 30 L104 15' stroke='#fff' stroke-width='4' stroke-linecap='round'/>
+      <circle cx='45' cy='12' r='6' fill='#ff9f1c'/><circle cx='105' cy='12' r='6' fill='#ff9f1c'/>
+      <rect x='19' y='52' width='11' height='28' rx='5.5' fill='#ff9f1c'/><rect x='120' y='52' width='11' height='28' rx='5.5' fill='#ff9f1c'/>
+      <rect x='28' y='28' width='94' height='66' rx='12' fill='#e9edf5'/>
+      <rect x='35' y='35' width='80' height='52' rx='8' fill='#1c1830'/>
+      <ellipse cx='58' cy='57' rx='9' ry='11' fill='#7be3ff'/><ellipse cx='92' cy='57' rx='9' ry='11' fill='#7be3ff'/>
+      <circle cx='61' cy='53' r='3.2' fill='#fff'/><circle cx='95' cy='53' r='3.2' fill='#fff'/>
+      <circle cx='47' cy='72' r='4' fill='#ff8fb1' opacity='.7'/><circle cx='103' cy='72' r='4' fill='#ff8fb1' opacity='.7'/>
+      <path d='M65 72 Q75 81 85 72' stroke='#7be3ff' stroke-width='3.5' fill='none' stroke-linecap='round'/>
+      <rect x='22' y='94' width='106' height='10' rx='5' fill='#bfc6d4'/>
+      <path d='M24 104 H126 L119 125 Q118 129 113 129 H37 Q32 129 31 125 Z' fill='#d6dbe6'/>
+      <rect x='57' y='110' width='36' height='11' rx='4' fill='#c4cad8'/>
+      <g fill='#9aa3b5'><circle cx='42' cy='111' r='2'/><circle cx='50' cy='111' r='2'/><circle cx='100' cy='111' r='2'/><circle cx='108' cy='111' r='2'/><circle cx='42' cy='118' r='2'/><circle cx='50' cy='118' r='2'/><circle cx='100' cy='118' r='2'/><circle cx='108' cy='118' r='2'/></g>
+    </svg>
+    <div class='bub b2'>I-explore natin ang macOS!</div>
+    <div class='low'>
+      <div class='bub b3'>Taga-Caloocan ka ba? Navotas? Valenzuela?</div>
+      <div class='bub b4'>Kumusta ang MacBook Neo mo, teacher?</div>
+      <div class='bub b5'>Anong keyboard shortcuts ang favorite mo?</div>
+    </div>
+  </div>
+  <div class='copy'>
+    <h2>Your free AI Chat Buddy for Learning with Mac</h2>
+    <p>HANDOG NG INYONG PARTNER, SENCO LINK TECHNOLOGIES</p>
+  </div>
+  <button id='go' type='button'>GET STARTED</button>
+</div>
+<script>
+var SYSTEM = [
+"Ikaw si “Mac Buddy”, friendly na learning buddy ng mga DepEd teacher sa Caloocan, Navotas, at Valenzuela na lumilipat mula Windows papuntang MacBook Neo. Nag-attend sila ng one-day Move to Mac training at ikaw ang kasama nila pagkatapos.",
+"",
+"LANGUAGE: Sumagot sa wika ng guro: Taglish (default), colloquial Tagalog, o English. Mag-mirror ng tono nila. Simple, malinaw, mainit, parang kapwa teacher o ate/kuya sa ICT. Iwasan ang malalim na Tagalog (hal. ‘salansan’). Tawagin ang guro na ‘Teacher’ (hal. ‘Teacher, subukan natin ito’), at huwag gumamit ng Ma’am o Sir. Gamitin ang ‘po’ nang natural, hindi sobra.",
+"",
+"TEACHING STYLE: Beginner na galing Windows ang kausap. Ikumpara palagi sa Windows: Dock = taskbar; Finder = File Explorer; Spotlight (Cmd+Space) = Windows search; Cmd = parang Ctrl; Option = parang Alt; Delete key = Backspace (Fn+Delete = Delete); Force Quit (Cmd+Option+Esc) = Ctrl+Alt+Del/Task Manager; System Settings = Control Panel/Settings; Trash = Recycle Bin; Menu bar sa itaas; pulang bilog = close lang ng window, hindi laging quit ng app; Pages/Numbers/Keynote = Word/Excel/PowerPoint pero kaya ring magbukas at mag-export ng Microsoft Office files; Cmd+Shift+3/4/5 = screenshot. Hakbang-hakbang, maximum 5-6 steps bawat sagot, isang konsepto lang sa isang sagot. Tapusin sa maikling follow-up tulad ng “Gumana ba? Sabihin mo kung ano ang nakikita mo.”",
+"",
+"DEPED CONTEXT: Gumamit ng mga terminong kilala ng guro: DLL/DLP (daily lesson log/plan), SF2, SF10 (Learner’s Permanent Record), LIS/LIS-EBEIS, DepEd Commons, DepEd email/Microsoft 365 account, Google Workspace, Teams, PowerPoint ng LAC session, grading sheet/e-class record, RPMS/IPCRF at COT (classroom observation), MELCs/MATATAG, modules at worksheets, SDO (Schools Division Office), school head, ICT Coordinator, DCP laptops, MOOE, bulletin board. I-relate ang mga gawain sa Mac sa totoong trabaho: paggawa ng DLL, pag-print ng worksheets, pag-save ng class record, pag-attach ng files sa email sa principal, pag-share ng screen sa Meet/Zoom/Teams, paggawa ng quiz, pag-record ng boses para sa lesson.",
+"",
+"LOCAL FLAVOR (gamitin nang natural, maikli, at hindi sa bawat sagot; huwag mag-imbento ng detalye): Caloocan (North at South, Monumento, Rizal Avenue, Sangandaan, Bagong Silang, Grace Park, Camarin), Navotas (Navotas Fish Port, bangus at tinapa, Tangos, San Jose, Tanza, Bangkulasi, mga mangingisda at baybayin), Valenzuela (Polo, Malinta, Karuhatan, Marulas, Gen. T. de Leon, Paso de Blas, Maysan, Valenzuela City bilang industrial city, patis). Gamitin bilang analogy, halimbawa: “Ang Dock ay parang tindahan ng paborito mong gamit sa Monumento: andun lahat ng madalas mong ginagamit”, “Folders sa Finder ay parang mga puwesto sa Fish Port, bawat isa may sariling kategorya”, “Kapag nag-freeze, parang trapik sa MacArthur Highway; i-force quit ang nakabara, hindi kailangang patayin ang buong biyahe”. Kung hindi tiyak ang city ng guro, huwag manghula. Puwede mong itanong nang isang beses kung saang city sila para mas bagay ang halimbawa.",
+"",
+"TROUBLESHOOTING: Para sa basic na problema (Wi-Fi/internet, hindi mag-open o nag-freeze na app, mabagal, walang tunog, hindi gumagana ang printer, hindi makita ang flash drive, hindi mabuksan ang Word/Excel/PPT file, hindi maka-login sa DepEd email, full na storage, hindi mag-charge, hindi mag-connect sa projector/TV, nakalimutang password, naipit na screen), unahin ang pinakamadali: 1) tanungin ang eksaktong nakikita sa screen (message, icon), 2) simpleng ayos muna (i-restart ang app, i-restart ang Mac, tingnan ang Wi-Fi/cable/charger, i-check ang System Settings), 3) isang hakbang lang bawat beses. Mag-ingat sa pagbura ng files: laging paalalahanang i-backup muna (flash drive, iCloud, o DepEd Google Drive/OneDrive).",
+"Kung hindi gumana pagkatapos ng 2-3 subok, o hardware problem (basag na screen, hindi nag-power on, basang laptop, amoy-sunog, namamagang battery), hardware warranty, o account/administrative na problema, sabihing lumapit sa ICT Coordinator ng school o sa SDO ICT unit, o sa Apple Support/authorized service provider. Huwag kailanman magmungkahi ng pirated software, pag-bypass ng school/DepEd restrictions o MDM, o paghingi/pagbibigay ng password.",
+"",
+"SOURCE NOTES (ito ang pangunahing batayan mo; galing sa Apple Support, MacBook Neo Getting Started Guide, Mac Laptop Support, at Apple Education Community). May dalawang bersyon ng guide: macOS 27 Golden Gate at macOS Tahoe 26, kaya puwedeng bahagyang magkaiba ang menu names depende sa macOS ng guro.",
+"- Setup: buksan ang takip ng MacBook Neo at sundin ang Setup Assistant. Migration Assistant ang naglilipat ng documents, photos, accounts, at settings mula Windows PC, sa setup o pagkatapos (https://support.apple.com/102565).",
+"- Windows vs Mac: Finder = File Explorer (Go > Home para makita ang Documents, Pictures, atbp.). System Settings = Control Panel (Wi-Fi, Bluetooth, font size, wallpaper, accessibility, Trackpad). Screenshot utility = Snipping Tool: Command+Shift+5 (Command+Shift+3 = buong screen, sine-save sa desktop). Dock sa ibaba para sa paboritong apps, ang Start menu ng Windows ay hindi eksaktong katumbas. Mga button sa itaas-kaliwa ng window: pula = isara ang window (hindi quit ang app), dilaw = i-minimize sa Dock, berde = i-maximize o full screen. Right-click = secondary click: two-finger click sa trackpad o Control+click; puwedeng baguhin sa System Settings > Trackpad > Secondary click.",
+"- Keys: Command ang pumapalit sa Ctrl sa karamihan ng shortcuts (Command-C copy, Command-V paste). Option ang pumapalit sa Alt (Option-E tapos E = é). Delete = backspace; Fn-Delete = forward delete. Return = Enter. Command-Space = Spotlight (search ng files at web). Option-Command-Esc = Force Quit (katumbas ng Ctrl-Alt-Delete). Iba pa: Command-X cut, Command-Z undo (Command-Shift-Z redo), Command-F find, Command-M minimize, Command-N bago, Command-P print, Command-S save, Command-Q quit app. Mas marami: https://support.apple.com/102650",
+"- Apps: Pages, Keynote, Numbers (nasa App Store) at puwedeng i-download sa App Store ang Microsoft Office at iba pang dating apps.",
+"- Tips: ang downloads ay karaniwang nasa Downloads folder sa kanang bahagi ng Dock. Sa Finder, View > Show Path Bar para makita kung nasaan ang file. Stacks: Control+click sa desktop > Use Stacks para ayusin ang desktop files. Idagdag ang folder sa Favorites sa Finder sidebar sa pamamagitan ng pag-drag. Hot Corners: System Settings > Desktop & Dock > Hot Corners. Tile windows: i-drag ang window sa gilid ng screen. Stage Manager: Control Center sa menu bar. AirDrop: Control Center, tapos Share > AirDrop (iPhone/iPad/Mac na malapit). AirPlay para i-mirror sa compatible na TV: Control Center > Mirror, piliin ang TV, ilagay ang 4-digit code kung hingin. Iba pang Continuity features (Universal Clipboard, iPhone Mirroring, Continuity Camera) para sa guro na may iPhone.",
+"- Apple Intelligence at Siri AI (Beta): hindi available sa lahat ng wika at rehiyon. Sa listahan ng Apple, hindi nakasama ang Filipino/Tagalog, kaya huwag mangakong gagana ito sa Tagalog o sa Pilipinas.",
+"- Backup at pag-ayos: Time Machine para sa backup gamit ang external drive (https://support.apple.com/en-us/104984). Nakalimutang Apple Account password: https://iforgot.apple.com . Battery health: https://support.apple.com/en-us/108376 . Kung hindi mag-connect ang cable ng display o drive sa USB-C/Thunderbolt port, kailangan ng adapter: https://support.apple.com/en-us/102477 . Minsan naaayos ng macOS update ang problema: https://support.apple.com/en-us/127455 . External display: gabay sa Apple Support, hanapin ang Connect an external display sa MacBook Neo guide. Repair/service: https://mysupport.apple.com , https://getsupport.apple.com , Apple Support app, at Apple Communities (https://discussions.apple.com). Tech specs: https://support.apple.com/en-us/docs",
+"- Para sa guro: Apple Teacher (libre, self-paced, para sa iPad at Mac skills) at Teaching with Mac Series sa https://education.apple.com . Hindi nakalista ang Pilipinas sa mga bansa na may Forum posting sa Apple Education Community, kaya huwag ipangakong makakapag-post ang guro doon, pero puwedeng tingnan ang learning resources.",
+"- Gabay: https://support.apple.com/en-gb/guide/macbook-neo/welcome/mac at https://support.apple.com/mac/laptops . Magbigay ng link kapag nakakatulong, hindi sa bawat sagot. Kapag gumagamit ng SOURCE NOTES, sabihing galing ito sa Apple Support guide kung relevant.",
+"",
+"HONESTY: Ang SOURCE NOTES lang ang batayan mo para sa Mac details; huwag magdagdag ng detalye na wala roon nang hindi sinasabing hindi ka sigurado. Hindi ka sigurado sa eksaktong specs, presyo, o menu names ng MacBook Neo o ng pinakabagong macOS version; ituro ang tech specs page ng Apple. Huwag mag-imbento. Kung hindi sigurado ang eksaktong pangalan ng setting o lokasyon nito, sabihin ito at ituro kung paano hanapin (hal. “Buksan ang System Settings at i-type ang keyword sa search box sa itaas-kaliwa”). Huwag magkunwaring may access ka sa screen, files, o account nila. Huwag humingi ng personal na impormasyon ng mga mag-aaral o password. Kapag labas sa saklaw (hindi tungkol sa Mac, computer, o gawain ng guro), magalang na ibalik sa paksa, pero puwedeng tumulong sa gawain ng guro na may kinalaman sa gamit ng Mac.",
+"",
+"FORMAT: Maikli (mga 120-180 salita maximum maliban kung hiningi ang mas detalyado). Numbered list para sa steps, gamit ang keyboard shortcuts na may simbolo (⌘ Cmd, ⌥ Option, ⇧ Shift, ⌃ Control). Bold lang para sa mga pangalan ng button o menu. Walang table. Pwede ng 1-2 emoji, huwag sobra."
+].join("\n");
+
+var TOPICS_EN = [
+ ["🖱️ Trackpad & shortcuts","How do I use the MacBook trackpad, and what are the most important shortcuts for a teacher coming from Windows?"],
+ ["📁 Finder vs File Explorer","How do I find and organize my files in Finder? Is it like File Explorer?"],
+ ["📝 Word/Excel files","How do I open and save my Word, Excel, and PowerPoint files (DLL, class record) on a Mac?"],
+ ["📶 No internet","My MacBook can’t connect to Wi-Fi. What should I do?"],
+ ["🧊 App froze","An app on my MacBook froze and won’t respond. How do I fix it without losing my work?"],
+ ["🖨️ Printer & flash drive","How do I print worksheets and use a flash drive on a MacBook?"],
+ ["📧 DepEd email & Teams","How do I use my DepEd email and Teams/Meet on a MacBook?"],
+ ["📺 Projector in class","How do I connect my MacBook to a projector or TV in the classroom?"]
+];
+var TOPICS_FIL = [
+ ["🖱️ Trackpad at shortcuts","Paano gamitin ang trackpad ng MacBook at ano ang mga pinakamahalagang shortcut para sa teacher na galing sa Windows?"],
+ ["📁 Finder vs File Explorer","Paano ko mahahanap at maaayos ang files ko sa Finder? Parang File Explorer ba ito?"],
+ ["📝 Word/Excel files","Paano ko bubuksan at ise-save ang Word, Excel, at PowerPoint files ko (DLL, class record) sa Mac?"],
+ ["📶 Walang internet","Ayaw kumonekta ng MacBook ko sa Wi-Fi. Ano ang gagawin ko?"],
+ ["🧊 Nag-freeze ang app","Nag-freeze ang app sa MacBook ko at hindi gumagalaw. Paano ko ito maaayos nang hindi nawawala ang gawa ko?"],
+ ["🖨️ Printer at flash drive","Paano mag-print ng worksheets at paano gumamit ng flash drive sa MacBook?"],
+ ["📧 DepEd email at Teams","Paano ko gagamitin ang DepEd email at Teams/Meet sa MacBook?"],
+ ["📺 Projector sa klase","Paano ikonekta ang MacBook sa projector o TV sa classroom?"]
+];
+
+var log=document.getElementById('log'),q=document.getElementById('q'),sendBtn=document.getElementById('send'),chips=document.getElementById('chips');
+var lang='en',convo=[],busy=false,sample=null,ctl=null;
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function inline(s){return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/(https?:\/\/[^\s<)]*[^\s<).,:;])/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')}
+function md(t){
+  var out='',list=null,lines=t.split('\n');
+  function close(){if(list){out+='</'+list+'>';list=null}}
+  lines.forEach(function(l){
+    var m=l.match(/^\s*(\d+)[.)]\s+(.*)/),b=l.match(/^\s*[-*•]\s+(.*)/);
+    if(m){if(list!=='ol'){close();out+='<ol>';list='ol'}out+='<li>'+inline(m[2])+'</li>'}
+    else if(b){if(list!=='ul'){close();out+='<ul>';list='ul'}out+='<li>'+inline(b[1])+'</li>'}
+    else if(l.trim()===''){close()}
+    else{close();out+='<p>'+inline(l)+'</p>'}
+  });
+  close();return out;
+}
+function add(role,text){
+  var d=document.createElement('div');d.className='msg '+(role==='user'?'me':'bot');
+  if(role==='user')d.textContent=text;else d.innerHTML=md(text);
+  log.appendChild(d);log.scrollTop=log.scrollHeight;return d;
+}
+var STR={
+ en:{ph:"New to Mac? That’s okay! Tell me what you’d like to learn. You can type in English or Filipino.",note:"AI buddy based on Apple Support guides; not an official Apple or DepEd guide. For serious problems, ask your school ICT Coordinator.",reset:"New chat",think:"Thinking…",na:"Sorry, the AI buddy isn’t available in this view. Please open this link in the Claude app, or in a browser where you’re signed in to claude.ai, and try again.",rl:"One moment, please. There are a lot of questions right now. Try again in a few seconds.",ng:"Permission is needed for Mac Buddy to work. Refresh the page and tap Allow.",err:"Oops, there was a connection problem. Try again, or check your internet first.",det:"Details"},
+ fil:{ph:"Bago ka ba sa Mac? Okay lang ’yan! Sabihin mo kung ano ang gusto mong matutunan. Puwede kang mag-type sa English o Filipino.",note:"AI buddy ito na batay sa Apple Support guides; hindi ito opisyal na gabay ng Apple o DepEd. Kung may seryosong problema, lumapit sa ICT Coordinator ng school.",reset:"Bagong chat",think:"Nag-iisip…",na:"Pasensya na po, hindi magamit ang AI buddy sa page na ito. Buksan ang link sa Claude app o sa browser na naka-sign in sa claude.ai, at subukan ulit.",rl:"Sandali lang po, medyo marami ang tanong ngayon. Subukan ulit pagkalipas ng ilang segundo.",ng:"Kailangan ng pahintulot para gumana ang Mac Buddy. I-refresh ang page at i-tap ang Allow.",err:"Naku, may problema sa koneksyon. Subukan ulit, o i-check muna ang internet mo.",det:"Detalye"}
+};
+var GREET={
+ en:"Hello, Teacher! 👋 I’m **Mac Buddy**, your companion for using your MacBook after the Move to Mac training.\n\nAsk me anything: using your Mac, making your DLL, or fixing laptop problems. English or Taglish, both are fine. Pick a topic below or type your question.",
+ fil:"Kumusta, Teacher! 👋 Ako si **Mac Buddy**, kasama mo sa paggamit ng MacBook pagkatapos ng Move to Mac training.\n\nItanong mo lang kahit ano: paggamit ng Mac, paggawa ng DLL, o kung may problema ang laptop. Taglish, Tagalog, o English, okay lahat. Pumili ng topic sa baba o i-type ang tanong mo."
+};
+var LANGDIR={
+ en:"LANGUAGE OVERRIDE (highest priority): Reply in clear, simple, warm English by default, even though the instructions below are written in Filipino. If the teacher writes in Taglish or Filipino, reply in the same style. Keep the DepEd terms, Windows-to-Mac comparisons, and local analogies, and address the teacher as ‘Teacher’.\n\n",
+ fil:"LANGUAGE OVERRIDE (highest priority): Sumagot sa Taglish o colloquial Filipino bilang default. Kung buong English ang isinulat ng guro, mag-English ka rin. Gumamit ng natural at kolokyal na Filipino (hal. “Anong maitutulong ko sa iyo?”), iwasan ang literal na salin mula sa English at ang malalalim na salita.\n\n"
+};
+function tx(k){return STR[lang][k]}
+function renderChips(){chips.innerHTML='';(lang==='fil'?TOPICS_FIL:TOPICS_EN).forEach(function(t){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t[0];b.onclick=function(){ask(t[1])};chips.appendChild(b)})}
+function applyLang(){document.documentElement.lang=lang==='fil'?'fil':'en';q.placeholder=tx('ph');document.getElementById('note').textContent=tx('note');document.getElementById('reset').textContent=tx('reset');document.getElementById('lang').value=lang;if(!convo.length)greet();else renderChips();navLabels();renderPanels()}
+function greet(){convo=[];log.innerHTML='';renderChips();chips.style.display='grid';document.querySelector('.app').classList.add('start')}
+function greetOld(){
+  convo=[];log.innerHTML='';
+  add('bot',"Kumusta, Teacher! 👋 Ako si **Mac Buddy**, kasama mo sa paggamit ng MacBook pagkatapos ng Move to Mac training.\n\nItanong mo lang kahit ano: paggamit ng Mac, paggawa ng DLL, o kung may problema ang laptop. Taglish, Tagalog, o English, okay lahat. Pumili ng topic sa baba o i-type ang tanong mo.");
+  chips.style.display='flex';
+}
+
+
+function ask(text){
+  text=(text||'').trim();if(!text||busy)return;
+  chips.style.display='none';document.querySelector('.app').classList.remove('start');
+  add('user',text);convo.push({role:'user',content:text});
+  q.value='';q.style.height='auto';
+  respond();
+}
+async function respond(){
+  busy=true;sendBtn.disabled=true;
+  var el=add('bot','');el.innerHTML='<span class="dots">'+tx('think')+'</span>';
+  try{
+    if(!sample){sample=await claude.use('sample')}
+    if(!sample){el.innerHTML=md(tx('na'));busy=false;sendBtn.disabled=false;return}
+    var msgs=convo.slice(-16).map(function(m){return {role:m.role,content:m.content}});while(msgs.length&&msgs[0].role!=='user')msgs.shift();
+    msgs[0]={role:'user',content:LANGDIR[lang]+"[MGA TAGUBILIN SA IYO, HUWAG IBANGGIT SA GURO]\n"+SYSTEM+"\n[WAKAS NG TAGUBILIN]\n\nUnang mensahe ng guro: "+msgs[0].content};
+    ctl=new AbortController();
+    var r=await sample(msgs,{modelTier:'quick',cache:false,signal:ctl.signal,onText:function(o){el.innerHTML=md(o.text);log.scrollTop=log.scrollHeight}});
+    el.innerHTML=md(r.text);convo.push({role:'assistant',content:r.text});addSave(el,r.text);
+  }catch(e){
+    if(e&&e.code==='rate_limited')el.innerHTML=md(tx('rl'));
+    else if(e&&e.code==='not_granted')el.innerHTML=md(tx('ng'));
+    else el.innerHTML=md(tx('err')+"\n\n("+tx('det')+": "+((e&&(e.code||e.message))||String(e))+")");
+    convo.pop();
+  }
+  busy=false;sendBtn.disabled=false;log.scrollTop=log.scrollHeight;
+}
+sendBtn.onclick=function(){ask(q.value)};
+q.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(q.value)}});
+q.addEventListener('input',function(){q.style.height='auto';q.style.height=Math.min(q.scrollHeight,120)+'px'});
+document.getElementById('reset').onclick=function(){if(ctl)ctl.abort();busy=false;sendBtn.disabled=false;greet();setTab('chat')};
+var L2={
+ en:{home:'Home',hi:'Hello, Teacher! 👋',hs:'How can I help you today?',new:'NEW CHAT',pin:'Pinned tips',all:'View all',exp:'Explore more',use:'USE THIS PROMPT',chat:'Home',sheet:'Shortcuts',saved:'Saved',save:'📌 Save tip',done:'✓ Saved',sh:'Windows → Mac shortcuts',shs:'Quick reference based on Apple Support.',what:'Action',win:'Windows',mac:'Mac',sv:'Saved tips',svs:'Tap a tip to open it. Saved on this device only.',empty:'No saved tips yet. Tap “📌 Save tip” under any answer to pin it here.',back:'← Back',rm:'Remove'},
+ fil:{home:'Home',hi:'Kumusta, Teacher! 👋',hs:'Anong maitutulong ko sa iyo?',new:'BAGONG CHAT',pin:'Mga naka-pin na tip',all:'Tingnan lahat',exp:'Mga puwedeng itanong',use:'GAMITIN ITO',chat:'Home',sheet:'Shortcuts',saved:'Naka-save',save:'📌 I-save',done:'✓ Naka-save',sh:'Windows → Mac shortcuts',shs:'Mabilis na gabay batay sa Apple Support.',what:'Gawain',win:'Windows',mac:'Mac',sv:'Mga naka-save na tip',svs:'I-tap ang tip para buksan. Sa device na ito lang naka-save.',empty:'Wala pang naka-save. I-tap ang “📌 I-save” sa ilalim ng sagot para ma-pin dito.',back:'← Bumalik',rm:'Alisin'}
+};
+function t2(k){return L2[lang][k]}
+var saved=[];try{saved=JSON.parse(localStorage.getItem('mbSaved')||'[]')}catch(e){}
+function persist(){try{localStorage.setItem('mbSaved',JSON.stringify(saved))}catch(e){}}
+var ICONS=[[/wi-?fi|internet|network/i,'📶'],[/screenshot|snip/i,'📸'],[/print/i,'🖨️'],[/freez|force quit/i,'🧊'],[/projector|airplay|\btv\b|display/i,'📺'],[/email|teams|meet\b|zoom/i,'📧'],[/battery|charg/i,'🔋'],[/backup|time machine|flash drive|usb/i,'💾'],[/word|excel|powerpoint|dll|office|pages|numbers/i,'📝'],[/shortcut|command|⌘|keyboard|trackpad|right-?click/i,'⌨️'],[/finder|folder|file|download/i,'📁']];
+function pick(t){for(var i=0;i<ICONS.length;i++)if(ICONS[i][0].test(t))return ICONS[i][1];return null}
+function addSave(el,text){
+  var b=document.createElement('button');b.type='button';b.className='save';
+  function isSaved(){return saved.some(function(x){return x.text===text})}
+  function paint(){b.textContent=isSaved()?t2('done'):t2('save');b.classList.toggle('done',isSaved())}
+  b.onclick=function(){
+    if(isSaved())return;
+    var title=text.replace(/[*`#]/g,'').split('\n').filter(function(l){return l.trim()})[0]||text;
+    title=title.replace(/^\s*(\d+[.)]|[-•])\s*/,'').trim();
+    if(title.length>46)title=title.slice(0,44).trim()+'…';
+    saved.unshift({id:Date.now(),text:text,title:title,icon:pick(title)||pick(text)||'📌'});
+    persist();paint();
+  };
+  paint();el.appendChild(b);
+}
+var SHEET=[
+ ['Copy','Kopyahin','Ctrl C','⌘ C'],['Paste','I-paste','Ctrl V','⌘ V'],['Cut','I-cut','Ctrl X','⌘ X'],['Undo','I-undo','Ctrl Z','⌘ Z'],
+ ['Find','Maghanap','Ctrl F','⌘ F'],['Save','I-save','Ctrl S','⌘ S'],['Print','I-print','Ctrl P','⌘ P'],['New file or window','Bagong file o window','Ctrl N','⌘ N'],
+ ['Search apps and files','Maghanap ng app o file','Windows search','⌘ Space'],
+ ['Screenshot options','Mga opsyon sa screenshot','Snipping Tool','⌘ ⇧ 5'],['Screenshot of whole screen','Screenshot ng buong screen','Print Screen','⌘ ⇧ 3'],
+ ['Force quit a frozen app','I-force quit ang naka-freeze na app','Ctrl Alt Delete','⌥ ⌘ Esc'],
+ ['Right-click','Right-click','Right mouse button','2-finger click or ⌃ click'],
+ ['Minimize window','I-minimize ang window','—','⌘ M'],['Quit app','Isara ang app','Alt F4','⌘ Q'],
+ ['Backspace','Burahin pabalik','Backspace','Delete'],['Forward delete','Burahin pasulong','Delete','Fn Delete']
+];
+function renderSheet(){
+  var h='<h2>'+t2('sh')+'</h2><p class="sub">'+t2('shs')+'</p><div style="overflow-x:auto"><table class="sh"><tr><th>'+t2('what')+'</th><th>'+t2('win')+'</th><th>'+t2('mac')+'</th></tr>';
+  SHEET.forEach(function(r){h+='<tr><td>'+(lang==='fil'?r[1]:r[0])+'</td><td><kbd>'+r[2]+'</kbd></td><td><kbd>'+r[3]+'</kbd></td></tr>'});
+  document.getElementById('sheet').innerHTML=h+'</table></div>';
+}
+function renderSaved(id){
+  var p=document.getElementById('saved');p.innerHTML='';
+  var s=id?saved.filter(function(x){return x.id===id})[0]:null;
+  if(s){
+    var bk=document.createElement('button');bk.type='button';bk.className='ghost';bk.textContent=t2('back');bk.onclick=function(){renderSaved()};p.appendChild(bk);
+    var d=document.createElement('div');d.className='msg bot';d.style.maxWidth='100%';d.style.marginTop='12px';d.innerHTML=md(s.text);p.appendChild(d);
+    var r=document.createElement('div');r.className='row';
+    var rm=document.createElement('button');rm.type='button';rm.className='ghost';rm.textContent=t2('rm');
+    rm.onclick=function(){saved=saved.filter(function(x){return x.id!==s.id});persist();renderSaved()};
+    r.appendChild(rm);p.appendChild(r);return;
+  }
+  var h=document.createElement('h2');h.textContent='📌 '+t2('sv');p.appendChild(h);
+  var sub=document.createElement('p');sub.className='sub';sub.textContent=saved.length?t2('svs'):t2('empty');p.appendChild(sub);
+  var g=document.createElement('div');g.className='tiles';
+  saved.forEach(function(x){
+    var b=document.createElement('button');b.type='button';b.className='tile';
+    var i=document.createElement('span');i.className='ic';i.textContent=x.icon;
+    var t=document.createElement('span');t.textContent=x.title;
+    b.appendChild(i);b.appendChild(t);b.onclick=function(){renderSaved(x.id)};g.appendChild(b);
+  });
+  p.appendChild(g);
+}
+function setTab(n){
+  var a=document.querySelector('.app');a.classList.remove('tab-sheet','tab-saved','tab-home');
+  if(n!=='chat')a.classList.add('tab-'+n);
+  [].forEach.call(document.querySelectorAll('#nav button'),function(b){b.classList.toggle('on',b.dataset.tab===n)});
+  if(n==='home')renderHome();if(n==='saved')renderSaved();if(n==='sheet')renderSheet();if(n==='chat')log.scrollTop=log.scrollHeight;
+}
+function navLabels(){[].forEach.call(document.querySelectorAll('#nav button'),function(b){b.querySelector('.l').textContent=t2(b.dataset.tab)})}
+function renderPanels(){var a=document.querySelector('.app');if(a.classList.contains('tab-home'))renderHome();if(a.classList.contains('tab-saved'))renderSaved();if(a.classList.contains('tab-sheet'))renderSheet()}
+function navBuild(){
+  var ic=function(d){return `<svg viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>${d}</svg>`};
+  var D={home:`<path d='M3 11l9-8 9 8'/><path d='M5 10v10h14V10'/>`,chat:`<path d='M3 11l9-8 9 8'/><path d='M5 10v10h14V10'/>`,sheet:`<rect x='2' y='6' width='20' height='12' rx='2'/><path d='M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10'/>`,saved:`<path d='M6 3h12v18l-6-4-6 4z'/>`};
+  var nav=document.getElementById('nav');
+  nav.innerHTML=['chat','sheet','saved'].map(function(k){return `<button type='button' data-tab='${k}'><span class='i'>${ic(D[k])}</span><span class='l'></span></button>`}).join('');
+  nav.querySelector('button').classList.add('on');
+}
+function renderHome(){
+  var p=document.getElementById('home');p.innerHTML='';
+  var g=document.createElement('div');g.className='hello';g.innerHTML='<h2>'+t2('hi')+'</h2><p>'+t2('hs')+'</p>';p.appendChild(g);
+  var nb=document.createElement('button');nb.type='button';nb.className='cta';nb.textContent='+  '+t2('new');nb.onclick=function(){greet();setTab('chat')};p.appendChild(nb);
+  if(saved.length){
+    var s1=document.createElement('div');s1.className='sec';s1.innerHTML='<h3>📌 '+t2('pin')+'</h3>';
+    var va=document.createElement('button');va.type='button';va.textContent=t2('all');va.onclick=function(){setTab('saved')};s1.appendChild(va);p.appendChild(s1);
+    var pr=document.createElement('div');pr.className='pins';
+    saved.forEach(function(x){var b=document.createElement('button');b.type='button';b.className='pin';b.textContent=x.icon+' '+x.title;b.onclick=function(){setTab('saved');renderSaved(x.id)};pr.appendChild(b)});
+    p.appendChild(pr);
+  }
+  var s2=document.createElement('div');s2.className='sec';s2.innerHTML='<h3>'+t2('exp')+'</h3>';p.appendChild(s2);
+  (lang==='fil'?TOPICS_FIL:TOPICS_EN).forEach(function(t){
+    var sp=t[0].indexOf(' '),icon=t[0].slice(0,sp),title=t[0].slice(sp+1);
+    var c=document.createElement('div');c.className='card';
+    var top=document.createElement('div');top.className='top';
+    var box=document.createElement('div');
+    var a=document.createElement('div');a.className='ct';a.textContent=title;
+    var d=document.createElement('div');d.className='cd';d.textContent=t[1];
+    box.appendChild(a);box.appendChild(d);
+    var ib=document.createElement('div');ib.className='ib';ib.textContent=icon;
+    top.appendChild(box);top.appendChild(ib);c.appendChild(top);
+    var u=document.createElement('button');u.type='button';u.className='use';u.textContent=t2('use');
+    u.onclick=function(){setTab('chat');ask(t[1])};c.appendChild(u);p.appendChild(c);
+  });
+}
+navBuild();
+[].forEach.call(document.querySelectorAll('#nav button'),function(b){b.onclick=function(){setTab(b.dataset.tab)}});
+try{lang=localStorage.getItem('mbLang')==='fil'?'fil':'en'}catch(e){}
+document.getElementById('go').onclick=function(){var w=document.getElementById('welcome');w.classList.add('out');setTimeout(function(){w.style.display='none'},400)};
+document.getElementById('lang').onchange=function(){lang=this.value;try{localStorage.setItem('mbLang',lang)}catch(e){}applyLang()};
+applyLang();
+</script>
+</body>
+</html>
