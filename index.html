@@ -131,6 +131,7 @@ body{background:transparent}
 .app.start .chip{background:rgba(70,30,150,.35);color:#fff;border:1px solid rgba(255,255,255,.3);box-shadow:none;border-radius:12px;padding:8px 10px;font-size:12.5px;font-weight:500}
 .app.start .note{margin-bottom:0;padding:6px 14px 10px;font-size:11.5px}
 .app.start textarea::placeholder{font-size:15px;line-height:1.35}
+.fu{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.fu .save{display:inline-block;margin:0}
 </style>
 </head>
 <body>
@@ -143,7 +144,7 @@ body{background:transparent}
 </header>
 <div id="log" aria-live="polite"></div>
 <div class="chips" id="chips"></div>
-<div class="note" id="note">AI buddy based on Apple Support guides; not an official Apple or DepEd guide. For serious problems, ask your school ICT Coordinator.</div>
+<div class="note" id="note">Answers come from prepared guides based on Apple Support; not an official Apple or DepEd guide. For serious problems, ask your school ICT Coordinator.</div>
 <div class="bar">
   <textarea id="q" rows="1" placeholder="New to Mac? That’s okay! Tell me what you’d like to learn. You can type in English or Filipino."></textarea>
   <button id="send" type="button">Send</button>
@@ -186,41 +187,12 @@ body{background:transparent}
     </div>
   </div>
   <div class='copy'>
-    <h2>Your free AI Chat Buddy for Learning with Mac</h2>
+    <h2>Your free Chat Buddy for Learning with Mac</h2>
     <p>HANDOG NG INYONG PARTNER, SENCO LINK TECHNOLOGIES</p>
   </div>
   <button id='go' type='button'>GET STARTED</button>
 </div>
 <script>
-var SYSTEM = [
-"Ikaw si “Mac Buddy”, friendly na learning buddy ng mga DepEd teacher sa Caloocan, Navotas, at Valenzuela na lumilipat mula Windows papuntang MacBook Neo. Nag-attend sila ng one-day Move to Mac training at ikaw ang kasama nila pagkatapos.",
-"",
-"LANGUAGE: Sumagot sa wika ng guro: Taglish (default), colloquial Tagalog, o English. Mag-mirror ng tono nila. Simple, malinaw, mainit, parang kapwa teacher o ate/kuya sa ICT. Iwasan ang malalim na Tagalog (hal. ‘salansan’). Tawagin ang guro na ‘Teacher’ (hal. ‘Teacher, subukan natin ito’), at huwag gumamit ng Ma’am o Sir. Gamitin ang ‘po’ nang natural, hindi sobra.",
-"",
-"TEACHING STYLE: Beginner na galing Windows ang kausap. Ikumpara palagi sa Windows: Dock = taskbar; Finder = File Explorer; Spotlight (Cmd+Space) = Windows search; Cmd = parang Ctrl; Option = parang Alt; Delete key = Backspace (Fn+Delete = Delete); Force Quit (Cmd+Option+Esc) = Ctrl+Alt+Del/Task Manager; System Settings = Control Panel/Settings; Trash = Recycle Bin; Menu bar sa itaas; pulang bilog = close lang ng window, hindi laging quit ng app; Pages/Numbers/Keynote = Word/Excel/PowerPoint pero kaya ring magbukas at mag-export ng Microsoft Office files; Cmd+Shift+3/4/5 = screenshot. Hakbang-hakbang, maximum 5-6 steps bawat sagot, isang konsepto lang sa isang sagot. Tapusin sa maikling follow-up tulad ng “Gumana ba? Sabihin mo kung ano ang nakikita mo.”",
-"",
-"DEPED CONTEXT: Gumamit ng mga terminong kilala ng guro: DLL/DLP (daily lesson log/plan), SF2, SF10 (Learner’s Permanent Record), LIS/LIS-EBEIS, DepEd Commons, DepEd email/Microsoft 365 account, Google Workspace, Teams, PowerPoint ng LAC session, grading sheet/e-class record, RPMS/IPCRF at COT (classroom observation), MELCs/MATATAG, modules at worksheets, SDO (Schools Division Office), school head, ICT Coordinator, DCP laptops, MOOE, bulletin board. I-relate ang mga gawain sa Mac sa totoong trabaho: paggawa ng DLL, pag-print ng worksheets, pag-save ng class record, pag-attach ng files sa email sa principal, pag-share ng screen sa Meet/Zoom/Teams, paggawa ng quiz, pag-record ng boses para sa lesson.",
-"",
-"LOCAL FLAVOR (gamitin nang natural, maikli, at hindi sa bawat sagot; huwag mag-imbento ng detalye): Caloocan (North at South, Monumento, Rizal Avenue, Sangandaan, Bagong Silang, Grace Park, Camarin), Navotas (Navotas Fish Port, bangus at tinapa, Tangos, San Jose, Tanza, Bangkulasi, mga mangingisda at baybayin), Valenzuela (Polo, Malinta, Karuhatan, Marulas, Gen. T. de Leon, Paso de Blas, Maysan, Valenzuela City bilang industrial city, patis). Gamitin bilang analogy, halimbawa: “Ang Dock ay parang tindahan ng paborito mong gamit sa Monumento: andun lahat ng madalas mong ginagamit”, “Folders sa Finder ay parang mga puwesto sa Fish Port, bawat isa may sariling kategorya”, “Kapag nag-freeze, parang trapik sa MacArthur Highway; i-force quit ang nakabara, hindi kailangang patayin ang buong biyahe”. Kung hindi tiyak ang city ng guro, huwag manghula. Puwede mong itanong nang isang beses kung saang city sila para mas bagay ang halimbawa.",
-"",
-"TROUBLESHOOTING: Para sa basic na problema (Wi-Fi/internet, hindi mag-open o nag-freeze na app, mabagal, walang tunog, hindi gumagana ang printer, hindi makita ang flash drive, hindi mabuksan ang Word/Excel/PPT file, hindi maka-login sa DepEd email, full na storage, hindi mag-charge, hindi mag-connect sa projector/TV, nakalimutang password, naipit na screen), unahin ang pinakamadali: 1) tanungin ang eksaktong nakikita sa screen (message, icon), 2) simpleng ayos muna (i-restart ang app, i-restart ang Mac, tingnan ang Wi-Fi/cable/charger, i-check ang System Settings), 3) isang hakbang lang bawat beses. Mag-ingat sa pagbura ng files: laging paalalahanang i-backup muna (flash drive, iCloud, o DepEd Google Drive/OneDrive).",
-"Kung hindi gumana pagkatapos ng 2-3 subok, o hardware problem (basag na screen, hindi nag-power on, basang laptop, amoy-sunog, namamagang battery), hardware warranty, o account/administrative na problema, sabihing lumapit sa ICT Coordinator ng school o sa SDO ICT unit, o sa Apple Support/authorized service provider. Huwag kailanman magmungkahi ng pirated software, pag-bypass ng school/DepEd restrictions o MDM, o paghingi/pagbibigay ng password.",
-"",
-"SOURCE NOTES (ito ang pangunahing batayan mo; galing sa Apple Support, MacBook Neo Getting Started Guide, Mac Laptop Support, at Apple Education Community). May dalawang bersyon ng guide: macOS 27 Golden Gate at macOS Tahoe 26, kaya puwedeng bahagyang magkaiba ang menu names depende sa macOS ng guro.",
-"- Setup: buksan ang takip ng MacBook Neo at sundin ang Setup Assistant. Migration Assistant ang naglilipat ng documents, photos, accounts, at settings mula Windows PC, sa setup o pagkatapos (https://support.apple.com/102565).",
-"- Windows vs Mac: Finder = File Explorer (Go > Home para makita ang Documents, Pictures, atbp.). System Settings = Control Panel (Wi-Fi, Bluetooth, font size, wallpaper, accessibility, Trackpad). Screenshot utility = Snipping Tool: Command+Shift+5 (Command+Shift+3 = buong screen, sine-save sa desktop). Dock sa ibaba para sa paboritong apps, ang Start menu ng Windows ay hindi eksaktong katumbas. Mga button sa itaas-kaliwa ng window: pula = isara ang window (hindi quit ang app), dilaw = i-minimize sa Dock, berde = i-maximize o full screen. Right-click = secondary click: two-finger click sa trackpad o Control+click; puwedeng baguhin sa System Settings > Trackpad > Secondary click.",
-"- Keys: Command ang pumapalit sa Ctrl sa karamihan ng shortcuts (Command-C copy, Command-V paste). Option ang pumapalit sa Alt (Option-E tapos E = é). Delete = backspace; Fn-Delete = forward delete. Return = Enter. Command-Space = Spotlight (search ng files at web). Option-Command-Esc = Force Quit (katumbas ng Ctrl-Alt-Delete). Iba pa: Command-X cut, Command-Z undo (Command-Shift-Z redo), Command-F find, Command-M minimize, Command-N bago, Command-P print, Command-S save, Command-Q quit app. Mas marami: https://support.apple.com/102650",
-"- Apps: Pages, Keynote, Numbers (nasa App Store) at puwedeng i-download sa App Store ang Microsoft Office at iba pang dating apps.",
-"- Tips: ang downloads ay karaniwang nasa Downloads folder sa kanang bahagi ng Dock. Sa Finder, View > Show Path Bar para makita kung nasaan ang file. Stacks: Control+click sa desktop > Use Stacks para ayusin ang desktop files. Idagdag ang folder sa Favorites sa Finder sidebar sa pamamagitan ng pag-drag. Hot Corners: System Settings > Desktop & Dock > Hot Corners. Tile windows: i-drag ang window sa gilid ng screen. Stage Manager: Control Center sa menu bar. AirDrop: Control Center, tapos Share > AirDrop (iPhone/iPad/Mac na malapit). AirPlay para i-mirror sa compatible na TV: Control Center > Mirror, piliin ang TV, ilagay ang 4-digit code kung hingin. Iba pang Continuity features (Universal Clipboard, iPhone Mirroring, Continuity Camera) para sa guro na may iPhone.",
-"- Apple Intelligence at Siri AI (Beta): hindi available sa lahat ng wika at rehiyon. Sa listahan ng Apple, hindi nakasama ang Filipino/Tagalog, kaya huwag mangakong gagana ito sa Tagalog o sa Pilipinas.",
-"- Backup at pag-ayos: Time Machine para sa backup gamit ang external drive (https://support.apple.com/en-us/104984). Nakalimutang Apple Account password: https://iforgot.apple.com . Battery health: https://support.apple.com/en-us/108376 . Kung hindi mag-connect ang cable ng display o drive sa USB-C/Thunderbolt port, kailangan ng adapter: https://support.apple.com/en-us/102477 . Minsan naaayos ng macOS update ang problema: https://support.apple.com/en-us/127455 . External display: gabay sa Apple Support, hanapin ang Connect an external display sa MacBook Neo guide. Repair/service: https://mysupport.apple.com , https://getsupport.apple.com , Apple Support app, at Apple Communities (https://discussions.apple.com). Tech specs: https://support.apple.com/en-us/docs",
-"- Para sa guro: Apple Teacher (libre, self-paced, para sa iPad at Mac skills) at Teaching with Mac Series sa https://education.apple.com . Hindi nakalista ang Pilipinas sa mga bansa na may Forum posting sa Apple Education Community, kaya huwag ipangakong makakapag-post ang guro doon, pero puwedeng tingnan ang learning resources.",
-"- Gabay: https://support.apple.com/en-gb/guide/macbook-neo/welcome/mac at https://support.apple.com/mac/laptops . Magbigay ng link kapag nakakatulong, hindi sa bawat sagot. Kapag gumagamit ng SOURCE NOTES, sabihing galing ito sa Apple Support guide kung relevant.",
-"",
-"HONESTY: Ang SOURCE NOTES lang ang batayan mo para sa Mac details; huwag magdagdag ng detalye na wala roon nang hindi sinasabing hindi ka sigurado. Hindi ka sigurado sa eksaktong specs, presyo, o menu names ng MacBook Neo o ng pinakabagong macOS version; ituro ang tech specs page ng Apple. Huwag mag-imbento. Kung hindi sigurado ang eksaktong pangalan ng setting o lokasyon nito, sabihin ito at ituro kung paano hanapin (hal. “Buksan ang System Settings at i-type ang keyword sa search box sa itaas-kaliwa”). Huwag magkunwaring may access ka sa screen, files, o account nila. Huwag humingi ng personal na impormasyon ng mga mag-aaral o password. Kapag labas sa saklaw (hindi tungkol sa Mac, computer, o gawain ng guro), magalang na ibalik sa paksa, pero puwedeng tumulong sa gawain ng guro na may kinalaman sa gamit ng Mac.",
-"",
-"FORMAT: Maikli (mga 120-180 salita maximum maliban kung hiningi ang mas detalyado). Numbered list para sa steps, gamit ang keyboard shortcuts na may simbolo (⌘ Cmd, ⌥ Option, ⇧ Shift, ⌃ Control). Bold lang para sa mga pangalan ng button o menu. Walang table. Pwede ng 1-2 emoji, huwag sobra."
-].join("\n");
 
 var TOPICS_EN = [
  ["🖱️ Trackpad & shortcuts","How do I use the MacBook trackpad, and what are the most important shortcuts for a teacher coming from Windows?"],
@@ -266,8 +238,8 @@ function add(role,text){
   log.appendChild(d);log.scrollTop=log.scrollHeight;return d;
 }
 var STR={
- en:{ph:"New to Mac? That’s okay! Tell me what you’d like to learn. You can type in English or Filipino.",note:"AI buddy based on Apple Support guides; not an official Apple or DepEd guide. For serious problems, ask your school ICT Coordinator.",reset:"New chat",think:"Thinking…",na:"Sorry, the AI buddy isn’t available in this view. Please open this link in the Claude app, or in a browser where you’re signed in to claude.ai, and try again.",rl:"One moment, please. There are a lot of questions right now. Try again in a few seconds.",ng:"Permission is needed for Mac Buddy to work. Refresh the page and tap Allow.",err:"Oops, there was a connection problem. Try again, or check your internet first.",det:"Details"},
- fil:{ph:"Bago ka ba sa Mac? Okay lang ’yan! Sabihin mo kung ano ang gusto mong matutunan. Puwede kang mag-type sa English o Filipino.",note:"AI buddy ito na batay sa Apple Support guides; hindi ito opisyal na gabay ng Apple o DepEd. Kung may seryosong problema, lumapit sa ICT Coordinator ng school.",reset:"Bagong chat",think:"Nag-iisip…",na:"Pasensya na po, hindi magamit ang AI buddy sa page na ito. Buksan ang link sa Claude app o sa browser na naka-sign in sa claude.ai, at subukan ulit.",rl:"Sandali lang po, medyo marami ang tanong ngayon. Subukan ulit pagkalipas ng ilang segundo.",ng:"Kailangan ng pahintulot para gumana ang Mac Buddy. I-refresh ang page at i-tap ang Allow.",err:"Naku, may problema sa koneksyon. Subukan ulit, o i-check muna ang internet mo.",det:"Detalye"}
+ en:{ph:"New to Mac? That’s okay! Tell me what you’d like to learn. You can type in English or Filipino.",note:"Answers come from prepared guides based on Apple Support; not an official Apple or DepEd guide. For serious problems, ask your school ICT Coordinator.",reset:"New chat",think:"Thinking…",na:"Sorry, the AI buddy isn’t available in this view. Please open this link in the Claude app, or in a browser where you’re signed in to claude.ai, and try again.",rl:"One moment, please. There are a lot of questions right now. Try again in a few seconds.",ng:"Permission is needed for Mac Buddy to work. Refresh the page and tap Allow.",err:"Oops, there was a connection problem. Try again, or check your internet first.",det:"Details"},
+ fil:{ph:"Bago ka ba sa Mac? Okay lang ’yan! Sabihin mo kung ano ang gusto mong matutunan. Puwede kang mag-type sa English o Filipino.",note:"Ang mga sagot dito ay mula sa mga gabay na hinango sa Apple Support; hindi ito opisyal na gabay ng Apple o DepEd. Kung may seryosong problema, lumapit sa ICT Coordinator ng school.",reset:"Bagong chat",think:"Nag-iisip…",na:"Pasensya na po, hindi magamit ang AI buddy sa page na ito. Buksan ang link sa Claude app o sa browser na naka-sign in sa claude.ai, at subukan ulit.",rl:"Sandali lang po, medyo marami ang tanong ngayon. Subukan ulit pagkalipas ng ilang segundo.",ng:"Kailangan ng pahintulot para gumana ang Mac Buddy. I-refresh ang page at i-tap ang Allow.",err:"Naku, may problema sa koneksyon. Subukan ulit, o i-check muna ang internet mo.",det:"Detalye"}
 };
 var GREET={
  en:"Hello, Teacher! 👋 I’m **Mac Buddy**, your companion for using your MacBook after the Move to Mac training.\n\nAsk me anything: using your Mac, making your DLL, or fixing laptop problems. English or Taglish, both are fine. Pick a topic below or type your question.",
@@ -295,24 +267,80 @@ function ask(text){
   q.value='';q.style.height='auto';
   respond();
 }
-async function respond(){
+function L(){return lang==='fil'?1:0}
+var KB=[
+['trackpad','🖱️',['Trackpad & keyboard shortcuts','Trackpad at shortcuts'],'trackpad|right click|rightclick|cursor|scroll*|mouse|gesture*|shortcut*|keyboard|ctrl|command key|copy|paste|undo',
+ [['Tap or press with one finger to click.','Click with two fingers (or hold Control and click) to right-click.','Slide two fingers up or down to scroll.','Use ⌘ (Command) where you used Ctrl on Windows: ⌘ C copy, ⌘ V paste, ⌘ Z undo, ⌘ S save.','Open the Shortcuts tab below for the full list.'],
+  ['Mag-tap o pindutin gamit ang isang daliri para mag-click.','Mag-click gamit ang dalawang daliri (o hawakan ang Control habang nagki-click) para sa right-click.','Mag-slide ng dalawang daliri pataas o pababa para mag-scroll.','Gamitin ang ⌘ (Command) sa dating Ctrl ng Windows: ⌘ C para mag-copy, ⌘ V para mag-paste, ⌘ Z para mag-undo, ⌘ S para mag-save.','Buksan ang Shortcuts tab sa ibaba para sa kumpletong listahan.']],
+ ['You can change the right-click style in System Settings > Trackpad.','Puwede mong baguhin ang right-click sa System Settings > Trackpad.'],
+ ['Open System Settings, search “Trackpad”, and check the click options.','Buksan ang System Settings, hanapin ang “Trackpad”, at tingnan ang mga click option.']],
+['finder','📁',['Finder & your files','Finder at mga file'],'finder|file explorer|folder*|documents|downloads|where is my file|nasaan ang file|saan napunta|hanapin ang file|find my files|organize|desktop|spotlight',
+ [['Click the Finder icon (the smiling face) at the left of the Dock.','Use the sidebar to open Documents, Downloads, or Desktop.','Press ⌘ Space and type a file name to search fast.','To make a folder, two-finger click an empty spot > New Folder.','Turn on View > Show Path Bar to see where a file is.'],
+  ['I-click ang Finder icon (yung nakangiting mukha) sa kaliwa ng Dock.','Gamitin ang sidebar para buksan ang Documents, Downloads, o Desktop.','Pindutin ang ⌘ Space at i-type ang pangalan ng file para mabilis na mahanap.','Para gumawa ng folder, mag-two-finger click sa bakanteng parte > New Folder.','I-on ang View > Show Path Bar para makita kung nasaan ang file.']],
+ ['Finder works like File Explorer on Windows.','Ang Finder ay parang File Explorer ng Windows.'],
+ ['Check the Downloads folder (right side of the Dock); downloaded files usually land there.','Tingnan ang Downloads folder (sa kanan ng Dock); doon karaniwang napupunta ang mga na-download.']],
+['office','📝',['Word, Excel & PowerPoint files','Word, Excel at PowerPoint'],'word|excel|powerpoint|power point|docx|xlsx|pptx|office|dll|dlp|class record|grading sheet|pages|numbers|keynote|microsoft|ppt|spreadsheet',
+ [['Double-click the file to open it. It opens in Microsoft Office if installed, or in Pages, Numbers, or Keynote.','To save, press ⌘ S, then choose a name and folder.','To give a copy to Windows users, use File > Export To in Pages, Numbers, or Keynote.','Back up important files (DLL, class record) to a flash drive or school drive.'],
+  ['I-double-click ang file para buksan. Magbubukas ito sa Microsoft Office kung naka-install, o sa Pages, Numbers, o Keynote.','Para mag-save, pindutin ang ⌘ S, tapos pumili ng pangalan at folder.','Para makapagbigay ng kopya sa gumagamit ng Windows, gamitin ang File > Export To sa Pages, Numbers, o Keynote.','I-backup ang mahahalagang file (DLL, class record) sa flash drive o school drive.']],
+ ['Microsoft Office and other apps can be downloaded from the App Store.','Puwedeng i-download sa App Store ang Microsoft Office at iba pang app.'],
+ ['Try opening the file from inside the app: open the app, then File > Open.','Subukang buksan ang file mula sa app mismo: buksan ang app, tapos File > Open.']],
+['wifi','📶',['Wi-Fi & internet','Wi-Fi at internet'],'wifi|wi fi|internet|network|connect*|online|offline|signal|router|hotspot|kumonekta|kumokonekta|konek*|walang internet',
+ [['Click the Wi-Fi icon at the top right of the screen (or open System Settings > Wi-Fi).','Make sure Wi-Fi is on, then choose your network.','Type the password and wait a few seconds.','Still not working? Turn Wi-Fi off and on, then restart the MacBook.','Check if your phone or another laptop can use the same network.'],
+  ['I-click ang Wi-Fi icon sa kanang itaas ng screen (o buksan ang System Settings > Wi-Fi).','Siguraduhing naka-on ang Wi-Fi, tapos piliin ang network ninyo.','I-type ang password at maghintay ng ilang segundo.','Ayaw pa rin? I-off at i-on ang Wi-Fi, tapos i-restart ang MacBook.','Tingnan kung nakaka-connect ang phone o ibang laptop sa parehong network.']],
+ ['','' ],
+ ['Ask your ICT Coordinator if the school network needs a special login.','Itanong sa ICT Coordinator kung may espesyal na login ang network ng school.']],
+['freeze','🧊',['App froze or slow','Nag-freeze o mabagal na app'],'freez*|frozen|froze|hang|hung|hangs|not responding|stuck|nagfreeze|nag freeze|naka freeze|nag hang|hindi gumagalaw|ayaw gumalaw|force quit|spinning|beach ball|slow|mabagal|bumabagal|lag|lagging|hindi sumasagot',
+ [['Wait a few seconds; some apps are just busy.','Press ⌥ ⌘ Esc (Option + Command + Esc).','Select the frozen app and click Force Quit.','Open the app again; it may offer to recover your work.','If everything is stuck, hold the power button until the screen turns off, then start again.'],
+  ['Maghintay ng ilang segundo; minsan busy lang ang app.','Pindutin ang ⌥ ⌘ Esc (Option + Command + Esc).','Piliin ang naka-freeze na app at i-click ang Force Quit.','Buksan ulit ang app; baka may alok itong i-recover ang gawa mo.','Kung lahat ay stuck, hawakan ang power button hanggang mamatay ang screen, tapos buksan ulit.']],
+ ['Save often with ⌘ S so you don’t lose your work.','Mag-save palagi gamit ang ⌘ S para hindi mawala ang gawa mo.'],
+ ['Restart the MacBook, then check System Settings > General > Software Update.','I-restart ang MacBook, tapos tingnan ang System Settings > General > Software Update.']],
+['printusb','🖨️',['Printing & flash drives','Pag-print at flash drive'],'print*|printer|flash drive|flash drives|flashdrive|usb|external drive|adapter|hard drive|pen drive|worksheet*',
+ [['To print, press ⌘ P in your document, choose the printer, then click Print.','If the printer is missing, check that it is on and on the same Wi-Fi, or plugged in by cable.','Plug in your flash drive; it appears in the Finder sidebar.','If it doesn’t fit the port, you may need a USB-C adapter.','Before unplugging, click the eject button beside it in Finder.'],
+  ['Para mag-print, pindutin ang ⌘ P sa dokumento, piliin ang printer, tapos i-click ang Print.','Kung wala ang printer sa listahan, tingnan kung naka-on ito at nasa parehong Wi-Fi, o nakakabit sa cable.','Isaksak ang flash drive; lalabas ito sa Finder sidebar.','Kung hindi kasya sa port, baka kailangan ng USB-C adapter.','Bago bunutin, i-click ang eject button sa tabi nito sa Finder.']],
+ ['',''],
+ ['Try another port or adapter, and ask your ICT Coordinator about the school printer.','Subukan ang ibang port o adapter, at itanong sa ICT Coordinator ang tungkol sa printer ng school.']],
+['email','📧',['DepEd email, Teams & Meet','DepEd email, Teams at Meet'],'email|e mail|gmail|deped email|teams|meet|google meet|zoom|outlook|microsoft 365|office 365|sign in|log in|login|deped commons|lis|google workspace|attachment',
+ [['Open Safari from the Dock.','Go to your DepEd email or Teams/Meet site and sign in with your DepEd account.','To join a class meeting, click the link and allow the camera and microphone when asked.','To attach a file, click the paperclip or drag the file into the email.'],
+  ['Buksan ang Safari mula sa Dock.','Pumunta sa DepEd email o Teams/Meet site at mag-sign in gamit ang DepEd account mo.','Para sumali sa meeting, i-click ang link at i-allow ang camera at microphone kapag tinanong.','Para mag-attach ng file, i-click ang paperclip o i-drag ang file sa email.']],
+ ['For account problems, ask your school ICT Coordinator or the SDO ICT unit.','Para sa problema sa account, lumapit sa ICT Coordinator ng school o sa SDO ICT unit.'],
+ ['Close the page, open it again, and sign in once more; if your account is locked, ask the SDO ICT unit.','Isara ang page, buksan ulit, at mag-sign in muli; kung naka-lock ang account, lumapit sa SDO ICT unit.']],
+['projector','📺',['Projector & TV','Projector at TV'],'projector|tv|television|smart tv|airplay|mirror*|screen mirroring|external display|display|monitor|hdmi|vga',
+ [['Check your cable. Newer MacBooks may need a USB-C adapter for HDMI or VGA.','Plug in the adapter and connect the cable to the projector or TV.','Turn on the projector and pick the right input (HDMI or VGA).','Open System Settings > Displays to choose Mirror or Extend.','For a compatible TV without a cable, open Control Center, choose Mirror, then pick the TV.'],
+  ['Tingnan ang cable. Maaaring mangailangan ng USB-C adapter para sa HDMI o VGA ang mas bagong MacBook.','Isaksak ang adapter at ikabit ang cable sa projector o TV.','I-on ang projector at piliin ang tamang input (HDMI o VGA).','Buksan ang System Settings > Displays para pumili ng Mirror o Extend.','Para sa compatible na TV na walang cable, buksan ang Control Center, piliin ang Mirror, tapos piliin ang TV.']],
+ ['',''],
+ ['Try another cable or adapter, and make sure the projector input matches the port you used.','Subukan ang ibang cable o adapter, at siguraduhing tugma ang input ng projector sa port na ginamit.']],
+['screenshot','📸',['Screenshots','Mga screenshot'],'screenshot*|screen shot|snipping|snip|print screen|capture|screen record*|kunan',
+ [['Press ⌘ ⇧ 5 to see the screenshot tools.','Press ⌘ ⇧ 3 to capture the whole screen; it saves to your desktop.','Choose the area or window you want, then click Capture.'],
+  ['Pindutin ang ⌘ ⇧ 5 para makita ang mga screenshot tool.','Pindutin ang ⌘ ⇧ 3 para kunan ang buong screen; mase-save ito sa desktop.','Piliin ang bahagi o window na gusto mo, tapos i-click ang Capture.']],
+ ['⌘ ⇧ 5 works like the Snipping Tool on Windows.','Ang ⌘ ⇧ 5 ay parang Snipping Tool ng Windows.'],
+ ['Look on your desktop for the new image, or search for “Screenshot” with ⌘ Space.','Hanapin sa desktop ang bagong larawan, o i-search ang “Screenshot” gamit ang ⌘ Space.']],
+['password','🔑',['Forgot password','Nakalimutang password'],'password|forgot|forgotten|nakalimutan|nakalimutang|reset|apple account|apple id|iforgot|locked out|nalock|passcode',
+ [['Open iforgot.apple.com in any browser.','Enter your Apple Account email and follow the steps.','For your DepEd or school account password, ask your ICT Coordinator.'],
+  ['Buksan ang iforgot.apple.com sa kahit anong browser.','I-type ang email ng Apple Account mo at sundin ang mga hakbang.','Para sa password ng DepEd o school account, lumapit sa ICT Coordinator.']],
+ ['',''],
+ ['Make sure Caps Lock is off and try again.','Siguraduhing naka-off ang Caps Lock at subukan ulit.']]
+];
+function norm(s){return ' '+s.toLowerCase().replace(/[^a-z0-9ñ\s]/g,' ').replace(/\s+/g,' ').trim()+' '}
+function match(text){var t=norm(text),best=null,bs=0;
+ KB.forEach(function(k){var sc=0;k[3].split('|').forEach(function(p){var pre=p.slice(-1)==='*';if(pre)p=p.slice(0,-1);p=' '+p.trim();if(!pre)p+=' ';if(t.indexOf(p)>-1)sc+=p.trim().split(' ').length});if(sc>bs){bs=sc;best=k}});
+ return best}
+
+var S3={en:{yes:'It worked',no:'Still not working',great:'Great, Teacher! 🎉 Ask me anything else anytime.',ict:'If it still doesn’t work, please ask your school ICT Coordinator for help.',nomatch:'Sorry, I don’t have a guide for that yet. Try one of these topics, or use different words (for example “Wi-Fi”, “print”, “screenshot”). For anything else, ask your school ICT Coordinator.'},
+fil:{yes:'Gumana',no:'Hindi pa rin',great:'Magaling, Teacher! 🎉 Magtanong ka lang ulit anumang oras.',ict:'Kung hindi pa rin gumana, lumapit po sa ICT Coordinator ng school ninyo.',nomatch:'Pasensya na, wala pa akong gabay para diyan. Subukan ang isa sa mga topic na ito, o gumamit ng ibang salita (halimbawa “Wi-Fi”, “print”, “screenshot”). Para sa iba pang tanong, lumapit sa ICT Coordinator ng school.'}};
+function t3(k){return S3[lang][k]}
+function body(m){var l=L();return '**'+m[1]+' '+m[2][l]+'**\n\n'+m[4][l].map(function(s,i){return (i+1)+'. '+s}).join('\n')+(m[5][l]?'\n\n💡 '+m[5][l]:'')}
+function btnRow(el,items){var d=document.createElement('div');d.className='fu';items.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='save';b.textContent=o[0];b.onclick=o[1];d.appendChild(b)});el.appendChild(d);return d}
+function respond(){
   busy=true;sendBtn.disabled=true;
   var el=add('bot','');el.innerHTML='<span class="dots">'+tx('think')+'</span>';
-  try{
-    if(!sample){sample=await claude.use('sample')}
-    if(!sample){el.innerHTML=md(tx('na'));busy=false;sendBtn.disabled=false;return}
-    var msgs=convo.slice(-16).map(function(m){return {role:m.role,content:m.content}});while(msgs.length&&msgs[0].role!=='user')msgs.shift();
-    msgs[0]={role:'user',content:LANGDIR[lang]+"[MGA TAGUBILIN SA IYO, HUWAG IBANGGIT SA GURO]\n"+SYSTEM+"\n[WAKAS NG TAGUBILIN]\n\nUnang mensahe ng guro: "+msgs[0].content};
-    ctl=new AbortController();
-    var r=await sample(msgs,{modelTier:'quick',cache:false,signal:ctl.signal,onText:function(o){el.innerHTML=md(o.text);log.scrollTop=log.scrollHeight}});
-    el.innerHTML=md(r.text);convo.push({role:'assistant',content:r.text});addSave(el,r.text);
-  }catch(e){
-    if(e&&e.code==='rate_limited')el.innerHTML=md(tx('rl'));
-    else if(e&&e.code==='not_granted')el.innerHTML=md(tx('ng'));
-    else el.innerHTML=md(tx('err')+"\n\n("+tx('det')+": "+((e&&(e.code||e.message))||String(e))+")");
-    convo.pop();
-  }
-  busy=false;sendBtn.disabled=false;log.scrollTop=log.scrollHeight;
+  var text=convo[convo.length-1].content;
+  setTimeout(function(){
+    var m=match(text),out=m?body(m):t3('nomatch');
+    el.innerHTML=md(out);convo.push({role:'assistant',content:out});
+    if(m){addSave(el,out);var row=btnRow(el,[['✅ '+t3('yes'),function(){row.remove();add('bot',t3('great'))}],['❌ '+t3('no'),function(){row.remove();add('bot','💡 '+m[6][L()]+'\n\n'+t3('ict'))}]])}
+    else{btnRow(el,KB.map(function(k){return [k[1]+' '+k[2][L()],function(){ask(k[2][L()])}]}))}
+    busy=false;sendBtn.disabled=false;log.scrollTop=log.scrollHeight;
+  },450);
 }
 sendBtn.onclick=function(){ask(q.value)};
 q.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask(q.value)}});
